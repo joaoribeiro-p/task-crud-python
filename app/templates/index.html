@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD de Tarefas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Minhas Tarefas</h1>
+
+        <form action="" method="POST" class="task-form">
+            <input type="text" name="title" placeholder="Digite uma tarefa" required>
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <section class="task-list">
+            {% for task in tasks %}
+                <div class="task-card">
+                    <div>
+                        <h2>{{ task.title }}</h2>
+                        <p>Status: {{ "Concluída" if task.done else "Pendente" }}</p>
+                    </div>
+
+                    <div class="actions">
+                        <a href="">Editar</a>
+
+                        <form action="" method="POST">
+                            <button class="danger" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <p class="empty">Nenhuma tarefa cadastrada.</p>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

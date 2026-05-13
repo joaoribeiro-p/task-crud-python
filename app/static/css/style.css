@@ -1,0 +1,122 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 60px auto;
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.task-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.task-form.vertical {
+    flex-direction: column;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button,
+.actions a,
+.back-link {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover,
+.actions a:hover,
+.back-link:hover {
+    background: #1d4ed8;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.task-card h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.task-card p {
+    color: #666;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions form {
+    margin: 0;
+}
+
+.danger {
+    background: #dc2626;
+}
+
+.danger:hover {
+    background: #b91c1c;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+}
