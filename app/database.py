@@ -29,6 +29,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 #inserir task no db
 def insert_task(task):
     conn = get_connection()
@@ -50,6 +51,7 @@ def insert_task(task):
     task.id = cursor.lastrowid
     
     conn.close()
+
 
 #listar tasks
 def get_all_tasks():        
@@ -74,3 +76,72 @@ def get_all_tasks():
         tasks.append(task)
     return tasks
 
+
+def update_task(task_id, new_title, new_desc):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE tasks
+        SET title = ?, desc = ?
+        WHERE id = ?
+    """, (
+        new_title,
+        new_desc,
+        task_id
+    ))
+
+    conn.commit()
+
+    updated_rows = cursor.rowcount
+
+    conn.close()
+
+    return updated_rows > 0 
+
+
+def db_delete_task(task_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM tasks
+        WHERE id = ?
+    """, (
+        task_id,
+    ))
+
+    conn.commit()
+
+    updated_rows = cursor.rowcount
+
+    conn.close()
+    return updated_rows > 0
+
+#função auxiliar:
+def get_task_by_id(task_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, title, desc, status, created_at, completed_at
+        FROM tasks
+        WHERE id = ?
+    """, (task_id,))
+
+    row = cursor.fetchone()
+    conn.close()
+
+    if row is None:
+        return None
+
+    task = Task(
+        title=row[1],
+        desc=row[2],
+        status=row[3],
+        created_at=row[4],
+        completed_at=row[5],
+        task_id=row[0]
+    )
+
+    return task
