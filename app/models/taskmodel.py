@@ -26,7 +26,7 @@ class Task:
 
         self.id = task_id
 
-    def complete_task(self):
+    def complete(self):
         if self.status == self.STATUS_CONCLUIDA:
             raise ValueError("Tarefa ja concluida.")
         

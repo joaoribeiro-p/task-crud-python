@@ -1,4 +1,3 @@
-from app.models.taskmodel import Task
 from app.services.taskservice import TaskService
 from app.database import get_task_by_id
 
@@ -39,14 +38,69 @@ def iniciar():
             
             #editar
             case "3":
-                print("Qual tarefa deseja editar?")
-                id_edit = int(input("Digite o ID da tarefa que deseja alterar: "))
-                nome_edit = input("Digite o novo nome: ")
-                desc_edit = input("Digite a nova descrição: ")
+                while True:
+                    menu_edit()
+                    opcaoEdit = input()
 
-                task = service.edit_task(id_edit, nome_edit, desc_edit)
-                print(f"Tarefa {task.id} Alterada com sucesso.")
-                print(f"Novo titulo: {task.title}, Nova descrição: {task.desc}.")
+                    match opcaoEdit:
+                        case "1":
+                            while True:
+
+                                try:
+
+                                    try:
+                                        id_edit = int(input("Digite o ID da tarefa: "))
+                                    except ValueError:
+                                        print("Digite um número válido.")
+                                        continue
+                                    
+                                    task_exist = get_task_by_id(id_edit)
+                                    if task_exist is None:
+                                        print("Nenhuma tarefa encontrada.")
+                                        continue
+
+                                    nome_edit = input("Novo nome: ").strip()
+                                    desc_edit = input("Nova descrição: ").strip()
+
+                                    task = service.edit_task(id_edit, nome_edit, desc_edit)
+
+                                    print(f"Tarefa #{task.id} alterada com sucesso.")
+
+                                    break
+
+                                except ValueError as error:
+                                    print(f"Erro: {error}")
+                                                 
+                        case "2":
+                            print("Qual tarefa deseja COMPLETAR?")
+                            try:                             
+                                id_complete = int(input())
+                            except ValueError:
+                                print("Digite um ID válido")
+                                continue
+
+                            task = service.complete_task(id_complete)
+                            
+                            print(f"Tarefa {task.id} - {task.title} está completa.")
+
+                        case "3":
+                            print("Qual tarefa deseja REABRIR?")
+                            try:                             
+                                id_reopen = int(input())
+                            except ValueError:
+                                print("Digite um ID válido")
+                                continue
+
+                            task = service.reopen_task(id_reopen)
+                            
+                            print(f"Tarefa {task.id} - {task.title} está reaberta.")
+
+                        case "0":
+                            break
+
+                        case _:
+                            print("Digite uma opção válida")
+                            continue
 
             
             #deletar
@@ -86,7 +140,7 @@ def iniciar():
             case "0":
                 break
 
-            
+
             #opção inválida
             case _:
                 print("Digite uma opção válida.")
@@ -96,6 +150,13 @@ def print_menu():
     print("LISTA DE TAREFAS")
     print("1 - Criar Tarefa")
     print("2 - Listar Tarefa")
-    print("3 - Editar Tarefa")
+    print("3 - Editar, Concluir ou Reabrir tarefa")
     print("4 - Deletar Tarefa")
     print("0 - Encerrar Programa")
+
+def menu_edit():
+    print("-- MENU EDIÇÃO --")
+    print("1 - Editar nome e descrição")
+    print("2 - Concluir tarefa")
+    print("3 - Reabrir tarefa")
+    print("0 - Voltar")

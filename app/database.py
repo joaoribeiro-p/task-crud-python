@@ -4,7 +4,7 @@ from app.models.taskmodel import Task
 
 DB_PATH = Path("instance/todo.db")
 
-
+#db
 def get_connection():
     Path("instance").mkdir(exist_ok=True)
 
@@ -76,48 +76,6 @@ def get_all_tasks():
         tasks.append(task)
     return tasks
 
-
-def update_task(task_id, new_title, new_desc):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        UPDATE tasks
-        SET title = ?, desc = ?
-        WHERE id = ?
-    """, (
-        new_title,
-        new_desc,
-        task_id
-    ))
-
-    conn.commit()
-
-    updated_rows = cursor.rowcount
-
-    conn.close()
-
-    return updated_rows > 0 
-
-
-def db_delete_task(task_id):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        DELETE FROM tasks
-        WHERE id = ?
-    """, (
-        task_id,
-    ))
-
-    conn.commit()
-
-    updated_rows = cursor.rowcount
-
-    conn.close()
-    return updated_rows > 0
-
 #função auxiliar:
 def get_task_by_id(task_id):
     conn = get_connection()
@@ -145,3 +103,82 @@ def get_task_by_id(task_id):
     )
 
     return task
+
+
+
+def update_task(task_id, new_title, new_desc):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE tasks
+        SET title = ?, desc = ?
+        WHERE id = ?
+    """, (
+        new_title,
+        new_desc,
+        task_id
+    ))
+
+    conn.commit()
+
+    updated_rows = cursor.rowcount
+
+    conn.close()
+
+    return updated_rows > 0 
+
+def db_delete_task(task_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM tasks
+        WHERE id = ?
+    """, (
+        task_id,
+    ))
+
+    conn.commit()
+
+    updated_rows = cursor.rowcount
+
+    conn.close()
+    return updated_rows > 0
+
+
+#concluir e reabrir task
+def db_complete_update(task):
+    
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE tasks
+        SET status = ?, completed_at = ?
+        WHERE id = ?
+    """, (
+        task.status,
+        task.completed_at,
+        task.id
+    ))
+
+    conn.commit()
+    conn.close()
+
+def db_reopen_update(task):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE tasks
+        SET status = ?, completed_at = ?
+        WHERE id = ?
+    """, (
+        task.status,
+        task.completed_at,
+        task.id
+    ))
+
+    conn.commit()
+    conn.close()

@@ -17,6 +17,8 @@ e facilitar manutenção da aplicação.
 - Listar tarefas
 - Editar tarefas
 - Deletar tarefas
+- Concluir tarefas
+- Re-abrir tarefas já concluidas
 
 
 ## Estrutura do Projeto
