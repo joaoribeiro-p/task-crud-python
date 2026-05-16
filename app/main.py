@@ -1,5 +1,5 @@
 from app.services.taskservice import TaskService
-from app.database import get_task_by_id
+from app.repositories.taskrepository import get_task_by_id
 
 def iniciar():
     service = TaskService()

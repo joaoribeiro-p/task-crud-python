@@ -1,5 +1,5 @@
 from app.models.taskmodel import Task
-from app.database import insert_task, get_all_tasks, update_task, get_task_by_id, db_delete_task, db_complete_update, db_reopen_update
+from app.repositories.taskrepository import insert_task, get_all_tasks, update_task, get_task_by_id, db_delete_task, db_complete_update, db_reopen_update
 
 class TaskService:
 
