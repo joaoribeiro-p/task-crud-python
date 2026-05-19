@@ -3,75 +3,118 @@
 {% block title %}Minhas Tarefas{% endblock %}
 
 {% block content %}
+
 <header class="header">
     <span class="tag">Task CRUD</span>
     <h1>Minhas Tarefas</h1>
 </header>
 
-<form action="/criar" method="POST" class="task-form" autocomplete="off">
+<section class="dashboard">
 
-    <input type="text" name="title" placeholder="Digite uma nova tarefa..." required>
+    <!-- Card de criação -->
+    <div class="panel create-panel">
+        <h2>Nova tarefa</h2>
 
-    <input type="text" name="desc" placeholder="Descrição da tarefa..." required>
+        <form action="/criar" method="POST" class="task-form" autocomplete="off">
+            <input type="text" name="title" placeholder="Digite uma nova tarefa..." required>
 
-    <button type="submit">Adicionar</button>
+            <input type="text" name="desc" placeholder="Descrição da tarefa..." required>
 
-</form>
-
-<!-- listagem -->
-<section class="task-list">
-
-    {% for task in tasks %}
-<a href="{{ url_for('main.edit', task_id=task.id) }}" class="task-card-link">
-    <article class="task-card">
-        <div class="task-main">
-
-            <!-- check-box-->
-            <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
-                <button type="submit" class="check-button">
-                    {% if task.status == "CONCLUIDA" %}
-                    ✓
-                    {% endif %}
-                </button>
-            </form>
-
-            <div class="task-content">
-                <div class="task-top">
-                    <span class="task-number">{{ loop.index }}.</span>
-                    <h2>{{ task.title }}</h2>
-                </div>
-
-                <p class="task-desc">{{ task.desc }}</p>
-
-                <span class="status pending">
-                    {{ task.status }}
-                </span>
-            </div>
-
-        </div>
-
-        <!--Data da tasks-->
-        <span class="task-date">
-            {% if task.status == "CONCLUIDA" %}
-                Concluída em {{ task.completed_at }}
-            {% else %}
-                Criada em {{ task.created_at }}
-            {% endif %}
-        </span>
-
-        <div class="actions">
-            
-        </div>
-
-    </article>
-</a>
-
-    {% else %}
-    <div class="empty">
-        <h2>Nenhuma tarefa cadastrada</h2>
-        <p>Adicione sua primeira tarefa acima.</p>
+            <button type="submit">Adicionar</button>
+        </form>
     </div>
-    {% endfor %}
+
+    <!-- Card de tarefas pendentes -->
+    <div class="panel">
+        <h2>A fazer</h2>
+
+        <section class="task-list">
+            {% for task in tasks %}
+            {% if task.status == "PENDENTE" %}
+
+            <a href="{{ url_for('main.edit', task_id=task.id) }}" class="task-card-link">
+                <article class="task-card">
+                    <div class="task-main">
+
+                        <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
+                            <button type="submit" class="check-button"></button>
+                        </form>
+
+                        <div class="task-content">
+                            <div class="task-top">
+                                <span class="task-number">{{ loop.index }}.</span>
+                                <h2>{{ task.title }}</h2>
+                            </div>
+
+                            <p class="task-desc">{{ task.desc }}</p>
+
+                            <span class="status pending">
+                                {{ task.status }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <span class="task-date">
+                        Criada em {{ task.created_at }}
+                    </span>
+                </article>
+            </a>
+
+            {% endif %}
+            {% else %}
+            <div class="empty">
+                <h2>Nenhuma tarefa cadastrada</h2>
+                <p>Adicione sua primeira tarefa acima.</p>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+
+    <!-- Card de tarefas concluídas -->
+    <div class="panel">
+        <h2>Concluídas</h2>
+
+        <section class="task-list">
+            {% for task in tasks %}
+            {% if task.status == "CONCLUIDA" %}
+
+            <a href="{{ url_for('main.edit', task_id=task.id) }}" class="task-card-link">
+                <article class="task-card completed">
+                    <div class="task-main">
+
+                        <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
+                            <button type="submit" class="check-button checked">
+                                ✓
+                            </button>
+                        </form>
+
+                        <div class="task-content">
+                            <div class="task-top">
+                                <span class="task-number">{{ loop.index }}.</span>
+                                <h2>{{ task.title }}</h2>
+                            </div>
+
+                            <p class="task-desc">{{ task.desc }}</p>
+
+                            <span class="status done">
+                                {{ task.status }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <span class="task-date">
+                        Concluída em {{ task.completed_at }}
+                    </span>
+                </article>
+            </a>
+
+            {% endif %}
+            {% endfor %}
+        </section>
+    </div>
 
 </section>
+
 {% endblock %}
