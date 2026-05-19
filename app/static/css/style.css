@@ -47,6 +47,8 @@ body {
     font-size: 15px;
 }
 
+
+
 .task-form {
     display: flex;
     gap: 12px;
@@ -110,6 +112,72 @@ button:hover,
     transform: translateY(-2px);
 }
 
+.task-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.task-check {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 6px;
+    border-radius: solid 2px ;
+}
+
+.check-form {
+    margin-top: 4px;
+}
+
+.check-button {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 2px solid #2563eb;
+    border-radius: 50%;
+    background: white;
+    color: #2563eb;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.check-button:hover {
+    background: #dbeafe;
+}
+
+.task-date {
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.task-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.task-content h2 {
+    font-size: 18px;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.task-desc {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 14px;
+    word-break: break-word;
+}
+
 .task-info h2 {
     margin-bottom: 8px;
     font-size: 18px;
@@ -118,6 +186,7 @@ button:hover,
 .status {
     display: inline-block;
     padding: 5px 10px;
+    margin-top: 10px;
     border-radius: 999px;
     font-size: 13px;
     font-weight: bold;
@@ -137,6 +206,7 @@ button:hover,
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .actions form {

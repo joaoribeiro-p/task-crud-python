@@ -5,6 +5,8 @@ class Task:
     STATUS_PENDENTE = "PENDENTE"
     STATUS_CONCLUIDA = "CONCLUIDA"
 
+
+
     def __init__(
         self,
         title,

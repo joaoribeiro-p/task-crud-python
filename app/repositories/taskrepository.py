@@ -1,5 +1,6 @@
 from app.database import get_connection
 from app.models.taskmodel import Task
+from datetime import datetime
 
 #inserir task no db
 def insert_task(task):

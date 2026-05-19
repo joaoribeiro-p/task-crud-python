@@ -8,34 +8,61 @@
     <h1>Minhas Tarefas</h1>
 </header>
 
-<form action="" method="POST" class="task-form" autocomplete="off">
+<form action="/criar" method="POST" class="task-form" autocomplete="off">
+
     <input type="text" name="title" placeholder="Digite uma nova tarefa..." required>
+
     <input type="text" name="desc" placeholder="Descrição da tarefa..." required>
+
     <button type="submit">Adicionar</button>
+
 </form>
 
+<!-- listagem -->
 <section class="task-list">
+
     {% for task in tasks %}
     <article class="task-card">
-        <span class="task-order">
-            {{ loop.index }}
-        </span>
-        <div class="task-info">
-            <h2>{{ task.title }}</h2>
-            <p>{{ task.desc }}</p>
-            <p>Status: {{ task.status }}</p>
-            <p>Criada: {{ task.created_at }}</p>
-            <p>ID: {{ task.id }} </p>
 
+        <div class="task-main">
 
-            <span class="status pending">
-                {{ "Pendente" if task.status else "Concluida" }}
-            </span>
+            <!-- check-box-->
+            <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
+                <button type="submit" class="check-button">
+                    {% if task.status == "CONCLUIDA" %}
+                    ✓
+                    {% endif %}
+                </button>
+            </form>
+
+            <div class="task-content">
+                <div class="task-top">
+                    <span class="task-number">{{ loop.index }}.</span>
+                    <h2>{{ task.title }}</h2>
+                </div>
+
+                <p class="task-desc">{{ task.desc }}</p>
+
+                <span class="status pending">
+                    {{ task.status }}
+                </span>
+            </div>
+
         </div>
+
+        <!--Data da tasks-->
+        <span class="task-date">
+            {% if task.status == "CONCLUIDA" %}
+                Concluída em {{ task.completed_at }}
+            {% else %}
+                Criada em {{ task.created_at }}
+            {% endif %}
+        </span>
 
         <div class="actions">
             <a href="{{ url_for('main.edit', task_id=task.id) }}">Editar</a>
         </div>
+
     </article>
 
     {% else %}
