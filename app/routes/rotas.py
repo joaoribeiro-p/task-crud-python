@@ -26,7 +26,10 @@ def criar_tarefa():
     
     desc = request.form["desc"] 
 
-    task = service.create_task(title, desc)
+    service.create_task(title, desc)
+    
+    return redirect(url_for("main.index"))
+
 
 @main.route("/complete/<int:task_id>", methods=["POST"])
 def complete(task_id):

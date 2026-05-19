@@ -22,8 +22,8 @@
 <section class="task-list">
 
     {% for task in tasks %}
+<a href="{{ url_for('main.edit', task_id=task.id) }}" class="task-card-link">
     <article class="task-card">
-
         <div class="task-main">
 
             <!-- check-box-->
@@ -60,10 +60,11 @@
         </span>
 
         <div class="actions">
-            <a href="{{ url_for('main.edit', task_id=task.id) }}">Editar</a>
+            
         </div>
 
     </article>
+</a>
 
     {% else %}
     <div class="empty">

@@ -95,6 +95,12 @@ button:hover,
     gap: 14px;
 }
 
+.task-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .task-card {
     display: flex;
     justify-content: space-between;
@@ -104,6 +110,7 @@ button:hover,
     border-radius: 16px;
     background: #f9fafb;
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .task-card:hover {
