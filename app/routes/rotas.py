@@ -12,12 +12,14 @@ def index():
     
     return render_template("index.html", tasks=tasks)
 
-@main.route("/editar/<int:task_id>")
+@main.route("/editar/<int:task_id>", methods=["POST"])
 def edit(task_id):
-    
-    task = get_task_by_id(task_id)
 
-    return render_template("edit.html", task=task)
+    title = request.form["title"]
+    desc = request.form["desc"]
+
+    service.edit_task(task_id, title, desc)
+    return redirect(url_for("main.index"))
 
 @main.route("/criar", methods=["POST"])
 def criar_tarefa():

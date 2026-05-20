@@ -18,15 +18,27 @@ class TaskService:
         return get_all_tasks()
     
     def edit_task(self, task_id, new_title, new_desc):
+
         if not new_title.strip():
-            raise ValueError ("Este campo não pode estar vázio.")
-        
+            raise ValueError("Este campo não pode estar vazio.")
+
+        task = get_task_by_id(task_id)
+
+        if task is None:
+            raise ValueError("Tarefa não encontrada.")
+
+        if task.status == "CONCLUIDA":
+            raise ValueError(
+                "Uma tarefa concluída não pode ser editada. Reabra antes de editar."
+            )
+
         sucesso = update_task(task_id, new_title, new_desc)
 
         if not sucesso:
-            raise ValueError("Tarefa não encontrada")
-        
+            raise ValueError("Erro ao atualizar tarefa.")
+
         return get_task_by_id(task_id)
+    
     
     def delete_task(self, task_id):
         db_delete_task(task_id)
