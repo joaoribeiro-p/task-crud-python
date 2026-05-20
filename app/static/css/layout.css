@@ -1,0 +1,44 @@
+/* dashboard */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.panel {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.panel h2 {
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+.create-panel {
+    background: #f8fafc;
+}
+
+/* Responsivo */
+
+@media (max-width: 1000px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        max-width: 850px;
+    }
+}
+
+@media (max-width: 650px) {
+    .panel {
+        padding: 18px;
+    }
+}

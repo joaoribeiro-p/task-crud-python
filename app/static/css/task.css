@@ -1,0 +1,157 @@
+/* Formulário */
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+}
+
+.task-form input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Lista */
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.task-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Card */
+
+.task-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #f9fafb;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.task-card:hover {
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+}
+
+.task-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* Checkbox */
+
+.check-form {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.check-button {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 2px solid #2563eb;
+    border-radius: 50%;
+    background: white;
+    color: #2563eb;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.check-button:hover {
+    background: #dbeafe;
+}
+
+/* Conteúdo */
+
+.task-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.task-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.task-number {
+    flex-shrink: 0;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.task-content h2 {
+    font-size: 18px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.task-desc {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* Status */
+
+.status {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.done {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* Datas */
+
+.task-date {
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Task concluída */
+
+.task-card.completed h2,
+.task-card.completed .task-desc {
+    opacity: 0.65;
+}
