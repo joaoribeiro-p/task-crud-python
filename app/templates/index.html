@@ -32,10 +32,12 @@
             {% for task in tasks %}
             {% if task.status == "PENDENTE" %}
 
-            <article class="task-card" onclick="openEditModal('{{ task.id }}', '{{ task.title }}', '{{ task.desc }}')">
+            <article class="task-card"
+                onclick='openInfoModal("{{ task.id }}", {{ task.title|tojson }}, {{ task.desc|tojson }}, "{{ task.status }}", "{{ task.created_at }}", "{{ task.completed_at or "" }}")'>
                 <div class="task-main">
 
-                    <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
+                    <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form"
+                        onclick="event.stopPropagation()">
                         <button type="submit" class="check-button"></button>
                     </form>
 
@@ -77,10 +79,13 @@
             {% for task in tasks %}
             {% if task.status == "CONCLUIDA" %}
 
-            <article class="task-card completed">
+            <article class="task-card completed"
+                onclick='openInfoModal("{{ task.id }}", {{ task.title|tojson }}, {{ task.desc|tojson }}, "{{ task.status }}", "{{ task.created_at }}", "{{ task.completed_at or "" }}")'>
                 <div class="task-main">
 
-                    <form action="{{ url_for('main.complete', task_id=task.id) }}" method="POST" class="check-form">
+                    <form action="{{ url_for('main.reopen', task_id=task.id) }}" method="POST" class="check-form"
+                        onclick="event.stopPropagation()" onsubmit="openConfirmModal(event)">
+
                         <button type="submit" class="check-button checked">
                             ✓
                         </button>
@@ -102,6 +107,7 @@
                 </div>
 
                 <span class="task-date">
+                    Criada em {{ task.created_at }} <br>
                     Concluída em {{ task.completed_at }}
                 </span>
             </article>
@@ -114,6 +120,8 @@
 
 </section>
 
+{% include "components/reopenconfirmation.html" %}
+{% include "components/taskinfomodal.html" %}
 {% include "components/editmodal.html" %}
 
 {% endblock %}

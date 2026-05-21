@@ -1,0 +1,26 @@
+<div id="info-modal" class="modal-overlay">
+    <div class="modal modal-large">
+        <button type="button" class="modal-close" onclick="closeInfoModal()">×</button>
+
+        <span id="info-status" class="status"></span>
+
+        <h2 id="info-title"></h2>
+
+        <p id="info-desc" class="modal-description"></p>
+
+        <div class="modal-meta">
+            <p><strong>Criada em:</strong> <span id="info-created"></span></p>
+            <p><strong>Concluída em:</strong> <span id="info-completed"></span></p>
+        </div>
+
+        <div class="modal-actions" id="info-actions">
+
+            <button type="button" id="edit-task-button" onclick="openEditFromInfo()">
+                Editar tarefa
+            </button>
+
+            <button type="button" class="secondary-button" onclick="closeInfoModal()">
+                Fechar
+            </button>
+        </div>
+    </div>
