@@ -1,6 +1,14 @@
 let currentTask = null;
 
+function closeAllModals() {
+    document.getElementById("info-modal").classList.remove("active");
+    document.getElementById("edit-modal").classList.remove("active");
+    document.getElementById("reopen-modal").classList.remove("active");
+}
+
 function openInfoModal(id, title, desc, status, createdAt, completedAt) {
+    closeAllModals();
+
     currentTask = {
         id,
         title,
@@ -16,18 +24,10 @@ function openInfoModal(id, title, desc, status, createdAt, completedAt) {
     document.getElementById("info-completed").textContent = completedAt || "Ainda não concluída";
 
     const statusElement = document.getElementById("info-status");
+    const editButton = document.getElementById("edit-task-button");
+
     statusElement.textContent = status;
     statusElement.className = "status";
-
-    if (status === "CONCLUIDA") {
-        statusElement.classList.add("done");
-    } else {
-        statusElement.classList.add("pending");
-    }
-
-    document.getElementById("info-modal").classList.add("active");
-
-    const editButton = document.getElementById("edit-task-button");
 
     if (status === "CONCLUIDA") {
         statusElement.classList.add("done");
@@ -36,6 +36,8 @@ function openInfoModal(id, title, desc, status, createdAt, completedAt) {
         statusElement.classList.add("pending");
         editButton.style.display = "block";
     }
+
+    document.getElementById("info-modal").classList.add("active");
 }
 
 function closeInfoModal() {
@@ -45,7 +47,7 @@ function closeInfoModal() {
 function openEditFromInfo() {
     if (!currentTask) return;
 
-    closeInfoModal();
+    closeAllModals();
 
     openEditModal(
         currentTask.id,
@@ -55,6 +57,8 @@ function openEditFromInfo() {
 }
 
 function openEditModal(id, title, desc) {
+    closeAllModals();
+
     document.getElementById("edit-form").action = `/editar/${id}`;
     document.getElementById("edit-title").value = title;
     document.getElementById("edit-desc").value = desc;

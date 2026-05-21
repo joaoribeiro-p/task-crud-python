@@ -2,11 +2,13 @@ let formParaReabrir = null;
 
 function openConfirmModal(event) {
     event.preventDefault();
+    event.stopPropagation();
+
+    closeAllModals();
 
     formParaReabrir = event.target;
 
-    const modal = document.getElementById("reopen-modal");
-    modal.classList.add("active");
+    document.getElementById("reopen-modal").classList.add("active");
 }
 
 function confirmReopen() {
@@ -16,8 +18,6 @@ function confirmReopen() {
 }
 
 function closeReopenModal() {
-    const modal = document.getElementById("reopen-modal");
-    modal.classList.remove("active");
-
+    document.getElementById("reopen-modal").classList.remove("active");
     formParaReabrir = null;
 }
