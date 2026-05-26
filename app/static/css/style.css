@@ -57,6 +57,21 @@ button:hover {
     background: #1d4ed8;
 }
 
+.delete-btn {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #eb2525;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+.delete-btn:hover {
+    background: #c91a1a;
+}
+
 .empty {
     text-align: center;
     padding: 28px;

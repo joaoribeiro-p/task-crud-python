@@ -5,11 +5,18 @@
         <h2>Editar tarefa</h2>
 
         <form id="edit-form" method="POST">
+            <p>Nome:</p>
             <input id="edit-title" type="text" name="title" required>
-
+            <p>Descrição:</p>
             <input id="edit-desc" type="text" name="desc" required>
 
             <button type="submit">Salvar alterações</button>
+            <br>
         </form>
+
+        <form id="delete-form" method="POST" onsubmit="openDeleteModal(event)">
+            <button type="submit" class="delete-btn">Deletar Tarefa</button>
+        </form>
+
     </div>
 </div>

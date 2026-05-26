@@ -42,3 +42,8 @@ def complete(task_id):
 def reopen(task_id):
     service.reopen_task(task_id)
     return redirect(url_for("main.index"))
+
+@main.route("/delete/<int:task_id>", methods=["POST"])
+def delete(task_id):
+    service.delete_task(task_id)
+    return redirect(url_for("main.index"))

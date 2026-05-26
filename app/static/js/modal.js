@@ -60,6 +60,7 @@ function openEditModal(id, title, desc) {
     closeAllModals();
 
     document.getElementById("edit-form").action = `/editar/${id}`;
+    document.getElementById("delete-form").action = `/delete/${id}`;
     document.getElementById("edit-title").value = title;
     document.getElementById("edit-desc").value = desc;
 
