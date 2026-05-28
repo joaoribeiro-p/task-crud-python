@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Tarefas Concluídas{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('main.index') }}" class="back-button">
+    ← Voltar
+</a>
+
+<header class="header">
+    <h1>Tarefas Concluídas</h1>
+</header>
+
+<section class="completed-page">
+
+    <div class="completed-panel">
+
+        <div class="completed-header">
+            <h2>Histórico de concluídas</h2>
+
+            <div class="pagination">
+                {% if page > 1 %}
+                <a href="{{ url_for('main.concluidas', page=page-1) }}">
+                    Anterior
+                </a>
+                {% endif %}
+
+                <span>Página {{ page }} de {{ total_pages }}</span>
+
+                {% if page < total_pages %} <a href="{{ url_for('main.concluidas', page=page+1) }}">
+                    Próxima
+                    </a>
+                    {% endif %}
+            </div>
+
+        </div>
+
+        <section class="completed-list">
+
+            {% for task in tasks %}
+
+            <article class="completed-item"
+                onclick='openInfoModal("{{ task.id }}", {{ task.title|tojson }}, {{ task.desc|tojson }}, "{{ task.status }}", "{{ task.created_at }}", "{{ task.completed_at or "" }}")'>
+
+                <form action="{{ url_for('main.reopen', task_id=task.id) }}" method="POST" class="completed-check-form"
+                    onclick="event.stopPropagation()" onsubmit="openConfirmModal(event)">
+
+                    <button type="submit" class="check-button checked">
+                        ✓
+                    </button>
+
+                </form>
+
+                <div class="completed-content">
+
+                    <div class="completed-top">
+                        <span class="completed-number">{{ loop.index }}.</span>
+                        <h2>{{ task.title|default("") }}</h2>
+                    </div>
+
+                    <p class="completed-desc">
+                        {{ task.desc|default("") }}
+                    </p>
+
+                    <span class="status done">
+                        {{ task.status }}
+                    </span>
+
+                    <div class="completed-date">
+                        Criada em {{ task.created_at }} <br>
+
+                        {% if task.completed_at %}
+                        Concluída em {{ task.completed_at }}
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% else %}
+
+            <div class="empty-state">
+                <p>Nenhuma tarefa concluída ainda.</p>
+            </div>
+
+            {% endfor %}
+
+        </section>
+
+    </div>
+
+</section>
+
+{% include "components/reopenconfirmation.html" %}
+{% include "components/deleteconfirmation.html" %}
+{% include "components/taskinfomodal.html" %}
+{% include "components/editmodal.html" %}
+
+{% endblock %}

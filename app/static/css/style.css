@@ -10,6 +10,10 @@ body {
     background: linear-gradient(135deg, #eef2ff, #f8fafc);
     color: #1f2937;
 }
+a, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
 
 .container {
     width: 95%;
@@ -85,6 +89,33 @@ button:hover {
     color: #334155;
     font-size: 18px;
 }
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 24px;
+
+    color: #475569;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    color: #2563eb;
+    transform: translateX(-2px);
+}
+
+.completed-footer {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+}
+
 
 @media (max-width: 650px) {
     .container {

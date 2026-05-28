@@ -5,7 +5,6 @@
 {% block content %}
 
 <header class="header">
-    <span class="tag">Task CRUD</span>
     <h1>Minhas Tarefas</h1>
 </header>
 
@@ -29,7 +28,7 @@
         <h2>A fazer</h2>
 
         <section class="task-list">
-            {% for task in tasks %}
+            {% for task in pending_tasks %}
             {% if task.status == "PENDENTE" %}
 
             <article class="task-card"
@@ -73,10 +72,11 @@
 
     <!-- Card de tarefas concluídas -->
     <div class="panel">
-        <h2>Concluídas</h2>
+            <h2>Concluídas</h2>
+        
 
         <section class="task-list">
-            {% for task in tasks %}
+            {% for task in completed_tasks %}
             {% if task.status == "CONCLUIDA" %}
 
             <article class="task-card completed"
@@ -116,6 +116,14 @@
             {% endif %}
             {% endfor %}
         </section>
+
+        <div class="completed-footer">
+
+            <a href="{{ url_for('main.concluidas') }}">
+                <button>Ver mais tarefas concluídas</button>
+            </a>
+
+        </div>
     </div>
 
 </section>

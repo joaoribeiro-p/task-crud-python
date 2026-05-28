@@ -1,0 +1,128 @@
+.completed-page {
+    width: 100%;
+    max-width: 900px;
+
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.completed-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+.completed-header {
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.completed-header h2 {
+    font-size: 22px;
+    color: #0f172a;
+}
+
+.completed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.completed-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #f9fafb;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.completed-item:hover {
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+}
+
+.completed-check-form {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.completed-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.completed-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.completed-number {
+    flex-shrink: 0;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.completed-top h2 {
+    font-size: 17px;
+    line-height: 1.25;
+    color: #334155;
+    overflow-wrap: anywhere;
+    opacity: 0.75;
+}
+
+.completed-desc {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    opacity: 0.7;
+}
+
+.completed-date {
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* PAGINAÇÃO */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination a {
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.pagination a:hover {
+    background: #1d4ed8;
+}
+
+.pagination span {
+    color: #475569;
+    font-size: 14px;
+}

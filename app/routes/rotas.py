@@ -8,9 +8,21 @@ service = TaskService()
 
 @main.route("/")
 def index():
+
     tasks = service.list_tasks()
-    
-    return render_template("index.html", tasks=tasks)
+
+    pending_tasks = [
+        task for task in tasks
+        if task.status == "PENDENTE"
+    ]
+
+    completed_tasks = service.list_completed_tasks()
+
+    return render_template(
+        "index.html",
+        pending_tasks=pending_tasks,
+        completed_tasks=completed_tasks
+    )
 
 @main.route("/editar/<int:task_id>", methods=["POST"])
 def edit(task_id):
@@ -47,3 +59,24 @@ def reopen(task_id):
 def delete(task_id):
     service.delete_task(task_id)
     return redirect(url_for("main.index"))
+
+
+
+#@main.route("/concluidas")
+#def completed_tasks():
+    tasks = service.list_completed_tasks()
+    return render_template("concluidas.html", tasks=tasks)
+
+@main.route("/concluidas")
+def concluidas():
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
+
+    tasks, total_pages = service.list_completed_tasks_paginated(page, per_page)
+
+    return render_template(
+        "concluidas.html",
+        tasks=tasks,
+        page=page,
+        total_pages=total_pages
+    )
