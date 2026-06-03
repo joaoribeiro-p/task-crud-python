@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Tarefas Concluídas{% endblock %}
+{% block title %}Tarefas Excluídas{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
 </a>
 
 <header class="header">
-    <h1>Tarefas Concluídas</h1>
+    <h1>Tarefas Excluídas</h1>
 </header>
 
 <section class="completed-page">
@@ -17,11 +17,11 @@
     <div class="completed-panel">
 
         <div class="completed-header">
-            <h2>Histórico de concluídas</h2>
+            <h2>Lixeira</h2>
 
             <div class="pagination">
                 {% if page > 1 %}
-                <a href="{{ url_for('main.concluidas', page=page-1) }}">
+                <a href="{{ url_for('main.excluidas', page=page-1) }}">
                     Anterior
                 </a>
                 {% endif %}
@@ -29,7 +29,7 @@
                 <span>Página {{ page }} de {{ total_pages }}</span>
 
                 {% if page < total_pages %}
-                <a href="{{ url_for('main.concluidas', page=page+1) }}">
+                <a href="{{ url_for('main.excluidas', page=page+1) }}">
                     Próxima
                 </a>
                 {% endif %}
@@ -41,7 +41,7 @@
             {% for task in tasks %}
 
             <article
-                class="completed-item"
+                class="completed-item deleted-item"
                 onclick='openInfoModal(
                     "{{ task.id|default("") }}",
                     {{ task.title|default("")|tojson }},
@@ -53,15 +53,14 @@
             >
 
                 <form
-                    action="{{ url_for('main.reopen', task_id=task.id) }}"
+                    action="{{ url_for('main.restore', task_id=task.id) }}"
                     method="POST"
                     class="completed-check-form"
                     onclick="event.stopPropagation()"
-                    onsubmit="openConfirmModal(event)"
                 >
 
-                    <button type="submit" class="check-button checked">
-                        ✓
+                    <button type="submit" class="restore-button">
+                        ↩
                     </button>
 
                 </form>
@@ -77,7 +76,7 @@
                         {{ task.desc|default("") }}
                     </p>
 
-                    <span class="status done">
+                    <span class="status deleted">
                         {{ task.status }}
                     </span>
 
@@ -86,18 +85,31 @@
 
                         {% if task.completed_at %}
                         <br>
-                        Concluída em {{ task.completed_at }}
+                        Foi concluída em {{ task.completed_at }}
                         {% endif %}
                     </div>
 
                 </div>
+
+                <form
+                    action="{{ url_for('main.hard_delete', task_id=task.id) }}"
+                    method="POST"
+                    class="hard-delete-form"
+                    onclick="event.stopPropagation()"
+                >
+
+                    <button type="submit" class="delete-button">
+                        Excluir permanentemente
+                    </button>
+
+                </form>
 
             </article>
 
             {% else %}
 
             <div class="empty-state">
-                <p>Nenhuma tarefa concluída ainda.</p>
+                <p>Nenhuma tarefa excluída.</p>
             </div>
 
             {% endfor %}
@@ -108,9 +120,7 @@
 
 </section>
 
-{% include "components/reopenconfirmation.html" %}
 {% include "components/deleteconfirmation.html" %}
 {% include "components/taskinfomodal.html" %}
-{% include "components/editmodal.html" %}
 
 {% endblock %}

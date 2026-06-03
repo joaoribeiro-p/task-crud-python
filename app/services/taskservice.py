@@ -1,6 +1,6 @@
 from app.models.taskmodel import Task
-from app.repositories.taskrepository import insert_task, get_all_tasks, update_task, get_task_by_id, db_delete_task, db_complete_update, db_reopen_update
-from app.repositories.taskrepository import get_completed_tasks, get_completed_tasks_paginated, count_completed_tasks
+from app.repositories.taskrepository import Repository as repository
+
 import math
 
 class TaskService:
@@ -14,7 +14,7 @@ class TaskService:
         
         task = Task(title, desc)
 
-        insert_task(task)
+        repository.insert_task(task)
         
         return task
     
@@ -23,21 +23,18 @@ class TaskService:
 # READ
 # =========================
     def list_tasks(self):
-        return get_all_tasks()
+        return repository.get_all_tasks()
     
-    def list_completed_tasks(self):
-        return get_completed_tasks()
+    def list_tasks_by_status(self, status, limit=None, page=None, per_page=None):
+        return repository.get_tasks_by_status(
+            status=status,
+            limit=limit,
+            page=page,
+            per_page=per_page
+        )
     
-    def list_completed_tasks_paginated(self, page=1, per_page=5):
-        offset = (page - 1) * per_page
-
-        tasks = get_completed_tasks_paginated(per_page, offset)
-        total_tasks = count_completed_tasks()
-
-        total_pages = math.ceil(total_tasks / per_page)
-
-        return tasks, total_pages
-    
+    def count_tasks_by_status(self, status):
+        return repository.count_tasks_by_status(status)
 # =========================
 # UPDATE
 # =========================
@@ -47,7 +44,7 @@ class TaskService:
         if not new_title.strip():
             raise ValueError("Este campo não pode estar vazio.")
 
-        task = get_task_by_id(task_id)
+        task = repository.get_task_by_id(task_id)
 
         if task is None:
             raise ValueError("Tarefa não encontrada.")
@@ -57,41 +54,79 @@ class TaskService:
                 "Uma tarefa concluída não pode ser editada. Reabra antes de editar."
             )
 
-        sucesso = update_task(task_id, new_title, new_desc)
+        sucesso = repository.update_task(task_id, new_title, new_desc)
 
         if not sucesso:
             raise ValueError("Erro ao atualizar tarefa.")
 
-        return get_task_by_id(task_id)
+        return repository.get_task_by_id(task_id)
        
     
     def complete_task(self, task_id):
         
-        task = get_task_by_id(task_id)
+        task = repository.get_task_by_id(task_id)
 
         if task is None:
             raise ValueError("Task inexistente.")
         
         task.complete()
         
-        db_complete_update(task) 
-        return get_task_by_id(task.id)
+        repository.db_complete_update(task) 
+        return repository.get_task_by_id(task.id)
 
     
     def reopen_task(self, task_id):
 
-        task = get_task_by_id(task_id)
+        task = repository.get_task_by_id(task_id)
 
         if task is None:
             raise ValueError("Task inexistente.")
         
         task.reopen()
-        db_reopen_update(task)
-        return get_task_by_id(task.id)
+        repository.db_reopen_update(task)
+        return repository.get_task_by_id(task.id)
+    
+    #def restore_task(self, task_id):
+        task = repository.get_task_by_id_including_deleted(task_id)
+
+        if task is None:
+            raise ValueError("Tarefa não encontrada.")
+
+        if task.status != Task.EXCLUIDA:
+            raise ValueError("A tarefa não está excluída.")
+
+        task.restore()
+
+        return repository.db_reopen_update(task)
 
 
 # =========================
 # DELETE
 # =========================
-    def delete_task(self, task_id):
-        db_delete_task(task_id)
+    def hard_delete(self, task_id):
+        task = repository.get_all_tasks_including_deleted(task_id)
+
+        if task is None:
+            raise ValueError("Tarefa não encontrada.")
+        
+        return repository.hard_delete_task(task_id)
+
+
+    def soft_delete(self, task_id):
+        task = repository.get_task_by_id(task_id)
+
+        if task is None:
+            raise ValueError("Tarefa não encontrada.")
+
+        return repository.soft_delete_task(task_id)
+    
+    #def restore_task(self, task_id):
+        task = repository.get_task_by_id_including_deleted(task_id)
+
+        if task is None:
+            raise ValueError("Tarefa não encontrada.")
+
+        if task.status != Task.EXCLUIDA:
+            raise ValueError("A tarefa não está excluída.")
+
+        return repository.restore_task(task_id)

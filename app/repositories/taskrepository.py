@@ -1,73 +1,12 @@
 from app.database import get_connection
 from app.models.taskmodel import Task
 
-# =========================
-# CREATE
-# =========================
-def insert_task(task):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        INSERT INTO tasks (title, desc, status, created_at, completed_at)
-        VALUES (?, ?, ?, ?, ?)
-    """, (
-        task.title,
-        task.desc,
-        task.status,
-        task.created_at,
-        task.completed_at
-    ))
-
-    conn.commit()
-    
-    task.id = cursor.lastrowid
-    
-    conn.close()
-
 
 # =========================
-# READ
+# AUXILIAR
 # =========================
-def get_all_tasks():        
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT id, title, desc, status, created_at, completed_at
-        FROM tasks
-    """)
-    rows = cursor.fetchall()
-    conn.close()
-    tasks = []
-    for row in rows:
-        task = Task(
-            title=row[1],
-            desc=row[2],
-            status=row[3],
-            created_at=row[4],
-            completed_at=row[5],
-            task_id=row[0]
-        )
-        tasks.append(task)
-    return tasks
-
-def get_task_by_id(task_id):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT id, title, desc, status, created_at, completed_at
-        FROM tasks
-        WHERE id = ?
-    """, (task_id,))
-
-    row = cursor.fetchone()
-    conn.close()
-
-    if row is None:
-        return None
-
-    task = Task(
+def row_to_task(row):
+    return Task(
         title=row[1],
         desc=row[2],
         status=row[3],
@@ -76,165 +15,236 @@ def get_task_by_id(task_id):
         task_id=row[0]
     )
 
-    return task
+class Repository:
+    # =========================
+    # CREATE
+    # =========================
+    def insert_task(task):
+        conn = get_connection()
+        cursor = conn.cursor()
 
-def get_completed_tasks():
-    conn = get_connection()
-    cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO tasks (title, desc, status, created_at, completed_at)
+            VALUES (?, ?, ?, ?, ?)
+        """, (
+            task.title,
+            task.desc,
+            task.status,
+            task.created_at,
+            task.completed_at
+        ))
 
-    cursor.execute("""
-        SELECT *
-        FROM tasks
-        WHERE status = 'CONCLUIDA'
-        ORDER BY completed_at DESC
-        LIMIT 5
-    """)
+        conn.commit()
+        
+        task.id = cursor.lastrowid
+        
+        conn.close()
 
-    rows = cursor.fetchall()
 
-    conn.close()
+    # =========================
+    # READ
+    # =========================
+    def get_all_tasks():        
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    tasks = []
+        cursor.execute("""
+            SELECT id, title, desc, status, created_at, completed_at
+            FROM tasks
+            WHERE status != ?
+            ORDER BY id DESC
+        """, ("EXCLUIDA",))
 
-    for row in rows:
+        rows = cursor.fetchall()
+        conn.close()
 
-        task = Task(
-            title=row[1],
-            desc=row[2],
-            status=row[3],
-            created_at=row[4],
-            completed_at=row[5],
-            task_id=row[0]
-        )
+        return [row_to_task(row) for row in rows]
 
-        tasks.append(task)
+    def get_task_by_id(task_id):
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    return tasks
+        cursor.execute("""
+            SELECT id, title, desc, status, created_at, completed_at
+            FROM tasks
+            WHERE id = ?
+            AND status != ?
+        """, (task_id, "EXCLUIDA"))
 
-def get_completed_tasks_paginated(limit, offset):
-    conn = get_connection()
-    cursor = conn.cursor()
+        row = cursor.fetchone()
+        conn.close()
 
-    cursor.execute("""
-        SELECT id, title, desc, status, created_at, completed_at
-        FROM tasks
-        WHERE status = ?
-        ORDER BY completed_at DESC
-        LIMIT ? OFFSET ?
-    """, ("CONCLUIDA", limit, offset))
+        if row is None:
+            return None
 
-    rows = cursor.fetchall()
-    conn.close()
+        return row_to_task(row)
 
-    tasks = []
+    def get_tasks_by_status(status, limit=None, page=None, per_page=None):
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    for row in rows:
-        task = Task(
-            title=row[1],
-            desc=row[2],
-            status=row[3],
-            created_at=row[4],
-            completed_at=row[5],
-            task_id=row[0]
-        )
-        tasks.append(task)
+        order_by = "created_at DESC"
 
-    return tasks
+        if status == "CONCLUIDA":
+            order_by = "completed_at DESC"
 
-def count_completed_tasks():
-    conn = get_connection()
-    cursor = conn.cursor()
+        query = f"""
+            SELECT id, title, desc, status, created_at, completed_at
+            FROM tasks
+            WHERE status = ?
+            ORDER BY {order_by}
+        """
 
-    cursor.execute("""
-        SELECT COUNT(*)
-        FROM tasks
-        WHERE status = ?
-    """, ("CONCLUIDA",))
+        params = [status]
 
-    total = cursor.fetchone()[0]
-    conn.close()
+        if page is not None and per_page is not None:
+            offset = (page - 1) * per_page
+            query += " LIMIT ? OFFSET ?"
+            params.extend([per_page, offset])
+        
+        elif limit is not None:
+            query += " LIMIT ?"
+            params.append(limit)
 
-    return total 
 
-# =========================
-# UPDATE
-# =========================
-def update_task(task_id, new_title, new_desc):
-    conn = get_connection()
-    cursor = conn.cursor()
+        cursor.execute(query, params)
 
-    cursor.execute("""
-        UPDATE tasks
-        SET title = ?, desc = ?
-        WHERE id = ?
-    """, (
-        new_title,
-        new_desc,
-        task_id
-    ))
+        rows = cursor.fetchall()
+        conn.close()
 
-    conn.commit()
-
-    updated_rows = cursor.rowcount
-
-    conn.close()
-
-    return updated_rows > 0 
-
-def db_complete_update(task):
+        return [row_to_task(row) for row in rows]
     
-    conn = get_connection()
-    cursor = conn.cursor()
+    def count_tasks_by_status(status):
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        UPDATE tasks
-        SET status = ?, completed_at = ?
-        WHERE id = ?
-    """, (
-        task.status,
-        task.completed_at,
-        task.id
-    ))
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM tasks
+            WHERE status = ?
+        """, (status,))
 
-    conn.commit()
-    conn.close()
+        total = cursor.fetchone()[0]
+        conn.close()
 
-def db_reopen_update(task):
-    conn = get_connection()
-    cursor = conn.cursor()
+        return total
 
-    cursor.execute("""
-        UPDATE tasks
-        SET status = ?, completed_at = ?
-        WHERE id = ?
-    """, (
-        task.status,
-        task.completed_at,
-        task.id
-    ))
+    def get_all_tasks_including_deleted(task_id):        
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    conn.commit()
-    conn.close()
+        cursor.execute("""
+            SELECT id, title, desc, status, created_at, completed_at
+            FROM tasks
+            WHERE id = ?
+        """, (task_id,))
+
+        row = cursor.fetchone()
+        conn.close()
+
+        if row is None:
+            return None
+
+        return row_to_task(row)
+
+    # =========================
+    # UPDATE
+    # =========================
+    def update_task(task_id, new_title, new_desc):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET title = ?, desc = ?
+            WHERE id = ?
+        """, (
+            new_title,
+            new_desc,
+            task_id
+        ))
+
+        conn.commit()
+
+        updated_rows = cursor.rowcount
+
+        conn.close()
+
+        return updated_rows > 0 
+
+    def db_complete_update(task):
+        
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET status = ?, completed_at = ?
+            WHERE id = ?
+        """, (
+            task.status,
+            task.completed_at,
+            task.id
+        ))
+
+        conn.commit()
+        conn.close()
+
+    def db_reopen_update(task):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET status = ?, completed_at = ?
+            WHERE id = ?
+        """, (
+            task.status,
+            task.completed_at,
+            task.id
+        ))
+
+        conn.commit()
+        conn.close()
 
 
 
-# =========================
-# DELETE
-# =========================
-def db_delete_task(task_id):
-    conn = get_connection()
-    cursor = conn.cursor()
+    # =========================
+    # DELETE
+    # =========================
+    def hard_delete_task(task_id):
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        DELETE FROM tasks
-        WHERE id = ?
-    """, (
-        task_id,
-    ))
+        cursor.execute("""
+            DELETE FROM tasks
+            WHERE id = ?
+        """, (
+            task_id,
+        ))
 
-    conn.commit()
+        conn.commit()
 
-    updated_rows = cursor.rowcount
+        updated_rows = cursor.rowcount
 
-    conn.close()
-    return updated_rows > 0
+        conn.close()
+        return updated_rows > 0
+
+    def soft_delete_task(task_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET status = ?
+            WHERE id = ?
+        """, ("EXCLUIDA", task_id))
+
+        conn.commit()
+        affected_rows = cursor.rowcount
+        conn.close()
+
+        return affected_rows > 0
+
+
+    

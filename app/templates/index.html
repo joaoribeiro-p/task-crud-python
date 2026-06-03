@@ -29,7 +29,6 @@
 
         <section class="task-list">
             {% for task in pending_tasks %}
-            {% if task.status == "PENDENTE" %}
 
             <article class="task-card"
                 onclick='openInfoModal("{{ task.id }}", {{ task.title|tojson }}, {{ task.desc|tojson }}, "{{ task.status }}", "{{ task.created_at }}", "{{ task.completed_at or "" }}")'>
@@ -60,7 +59,6 @@
                 </span>
             </article>
 
-            {% endif %}
             {% else %}
             <div class="empty">
                 <h2>Nenhuma tarefa cadastrada</h2>
@@ -77,7 +75,6 @@
 
         <section class="task-list">
             {% for task in completed_tasks %}
-            {% if task.status == "CONCLUIDA" %}
 
             <article class="task-card completed"
                 onclick='openInfoModal("{{ task.id }}", {{ task.title|tojson }}, {{ task.desc|tojson }}, "{{ task.status }}", "{{ task.created_at }}", "{{ task.completed_at or "" }}")'>
@@ -113,7 +110,6 @@
             </article>
 
 
-            {% endif %}
             {% endfor %}
         </section>
 
@@ -121,6 +117,13 @@
 
             <a href="{{ url_for('main.concluidas') }}">
                 <button>Ver mais tarefas concluídas</button>
+            </a>
+
+        </div>
+        <div class="completed-footer">
+
+            <a href="{{ url_for('main.excluidas') }}">
+                <p>🗑 Ver tarefas excluidas</p>
             </a>
 
         </div>

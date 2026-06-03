@@ -2,8 +2,9 @@ from datetime import datetime
 
 class Task:
 
-    STATUS_PENDENTE = "PENDENTE"
-    STATUS_CONCLUIDA = "CONCLUIDA"
+    PENDENTE = "PENDENTE"
+    CONCLUIDA = "CONCLUIDA"
+    EXCLUIDA = "EXCLUIDA"
 
 
 
@@ -20,7 +21,7 @@ class Task:
         self.title = title
         self.desc = desc
 
-        self.status = status or self.STATUS_PENDENTE
+        self.status = status or self.PENDENTE
 
         self.created_at = created_at or datetime.now()
 
@@ -29,15 +30,24 @@ class Task:
         self.id = task_id
 
     def complete(self):
-        if self.status == self.STATUS_CONCLUIDA:
+        if self.status == self.CONCLUIDA:
             raise ValueError("Tarefa ja concluida.")
         
-        self.status = self.STATUS_CONCLUIDA
+        self.status = self.CONCLUIDA
         self.completed_at = datetime.now()
     
     def reopen(self):
-        if self.status == self.STATUS_PENDENTE:
+        if self.status == self.PENDENTE:
             raise ValueError("Tarefa em andamento.")
         
-        self.status = self.STATUS_PENDENTE
+        self.status = self.PENDENTE
         self.completed_at = None
+
+    def delete(self):
+        if self.status == self.EXCLUIDA:
+            raise ValueError("Tarefa já excluida.")
+        
+        self.status = self.EXCLUIDA
+
+    def restore(self):
+        self.status = self.PENDENTE
