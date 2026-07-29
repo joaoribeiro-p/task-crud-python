@@ -245,6 +245,30 @@ class Repository:
         conn.close()
 
         return affected_rows > 0
+    
+    def restore_task(task_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET status = ?, completed_at = ?
+            WHERE id = ?
+            AND status = ?
+        """, (
+            Task.PENDENTE,
+            None,
+            task_id,
+            Task.EXCLUIDA
+        ))
+
+        conn.commit()
+
+        affected_rows = cursor.rowcount
+
+        conn.close()
+
+        return affected_rows > 0
 
 
     

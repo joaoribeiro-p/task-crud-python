@@ -1,6 +1,5 @@
 import sqlite3
 from pathlib import Path
-from app.models.taskmodel import Task
 
 DB_PATH = Path("instance/todo.db")
 

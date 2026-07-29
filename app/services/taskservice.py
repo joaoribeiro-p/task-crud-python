@@ -1,7 +1,6 @@
 from app.models.taskmodel import Task
 from app.repositories.taskrepository import Repository as repository
 
-import math
 
 class TaskService:
 
@@ -86,19 +85,6 @@ class TaskService:
         repository.db_reopen_update(task)
         return repository.get_task_by_id(task.id)
     
-    #def restore_task(self, task_id):
-        task = repository.get_task_by_id_including_deleted(task_id)
-
-        if task is None:
-            raise ValueError("Tarefa não encontrada.")
-
-        if task.status != Task.EXCLUIDA:
-            raise ValueError("A tarefa não está excluída.")
-
-        task.restore()
-
-        return repository.db_reopen_update(task)
-
 
 # =========================
 # DELETE
@@ -120,8 +106,8 @@ class TaskService:
 
         return repository.soft_delete_task(task_id)
     
-    #def restore_task(self, task_id):
-        task = repository.get_task_by_id_including_deleted(task_id)
+    def restore_task(self, task_id):
+        task = repository.get_all_tasks_including_deleted(task_id)
 
         if task is None:
             raise ValueError("Tarefa não encontrada.")

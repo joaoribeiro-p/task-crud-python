@@ -1,9 +1,20 @@
 let currentTask = null;
 
 function closeAllModals() {
-    document.getElementById("info-modal").classList.remove("active");
-    document.getElementById("edit-modal").classList.remove("active");
-    document.getElementById("reopen-modal").classList.remove("active");
+    const modalIds = [
+        "info-modal",
+        "edit-modal",
+        "reopen-modal",
+        "delete-modal"
+    ];
+
+    modalIds.forEach((modalId) => {
+        const modal = document.getElementById(modalId);
+
+        if (modal) {
+            modal.classList.remove("active");
+        }
+    });
 }
 
 function openInfoModal(id, title, desc, status, createdAt, completedAt) {
@@ -32,6 +43,11 @@ function openInfoModal(id, title, desc, status, createdAt, completedAt) {
     if (status === "CONCLUIDA") {
         statusElement.classList.add("done");
         editButton.style.display = "none";
+
+    } else if (status === "EXCLUIDA") {
+        statusElement.classList.add("deleted");
+        editButton.style.display = "none";
+
     } else {
         statusElement.classList.add("pending");
         editButton.style.display = "block";

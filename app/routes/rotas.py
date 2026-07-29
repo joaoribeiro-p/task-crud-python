@@ -8,7 +8,7 @@ service = TaskService()
 
 @main.route("/")
 def index():
-    pending_tasks = service.list_tasks_by_status("PENDENTE", limit=5)
+    pending_tasks = service.list_tasks_by_status("PENDENTE")
     completed_tasks = service.list_tasks_by_status("CONCLUIDA", limit=5)
 
     return render_template(
@@ -53,7 +53,11 @@ def reopen(task_id):
 
 @main.route("/concluidas")
 def concluidas():
-    page = request.args.get("page", 1, type=int)
+    page = max(
+        1,
+        request.args.get("page", 1, type=int)
+    )
+
     per_page = 5
 
     tasks = service.list_tasks_by_status(
@@ -93,7 +97,7 @@ def excluidas():
         total_pages=total_pages
     )
 
-@main.route("/restaurar/<int:task_id>", methods=["POST"])
+@main.route("/restore/<int:task_id>", methods=["POST"])
 def restore(task_id):
     service.restore_task(task_id)
     return redirect(url_for("main.excluidas"))
